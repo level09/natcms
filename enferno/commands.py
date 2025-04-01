@@ -11,8 +11,27 @@ import os
 
 from enferno.extensions import db
 from enferno.user.models import User
+from enferno.agents import DeveloperAgent
 
 console = Console()
+
+# Create agent command group
+agent_cli = AppGroup('agent', help='AI-powered development tools for Enferno framework')
+
+@agent_cli.command('template')
+@click.argument('request', required=False)
+@click.option('--template-path', default='index.html', help='Path to the template file')
+@with_appcontext
+def template_cmd(request, template_path):
+    """Modify a template using AI assistance."""
+    if not request:
+        request = click.prompt('What changes would you like to make to the template?')
+    
+    try:
+        agent = DeveloperAgent()
+        agent.modify_template(request, template_path)
+    except Exception as e:
+        click.echo(f"Error: {str(e)}", err=True)
 
 
 @click.command()

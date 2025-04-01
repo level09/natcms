@@ -112,5 +112,5 @@ def register_commands(app: Flask, commands_module):
     - commands_module: The module containing Click commands.
     """
     for name, obj in inspect.getmembers(commands_module):
-        if isinstance(obj, click.Command):
+        if isinstance(obj, (click.Command, click.Group)):
             app.cli.add_command(obj)
